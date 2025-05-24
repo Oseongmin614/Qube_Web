@@ -1,58 +1,33 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>키보드 조작 루빅스 큐브</title>
-    <link rel="stylesheet" href="../css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D 루빅스 큐브</title>
+  <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <div class="cube-container">
-        <div class="face top-face" data-label="윗면 (U)">
-            <div class="square" data-face="top" data-index="0"></div>
-            <div class="square" data-face="top" data-index="1"></div>
-            <div class="square" data-face="top" data-index="2"></div>
-            <div class="square" data-face="top" data-index="3"></div>
-            <div class="square" data-face="top" data-index="4"></div>
-            <div class="square" data-face="top" data-index="5"></div>
-            <div class="square" data-face="top" data-index="6"></div>
-            <div class="square" data-face="top" data-index="7"></div>
-            <div class="square" data-face="top" data-index="8"></div>
-        </div>
-        <div class="face front-face" data-label="앞면 (F)">
-            <div class="square" data-face="front" data-index="0"></div>
-            <div class="square" data-face="front" data-index="1"></div>
-            <div class="square" data-face="front" data-index="2"></div>
-            <div class="square" data-face="front" data-index="3"></div>
-            <div class="square" data-face="front" data-index="4"></div>
-            <div class="square" data-face="front" data-index="5"></div>
-            <div class="square" data-face="front" data-index="6"></div>
-            <div class="square" data-face="front" data-index="7"></div>
-            <div class="square" data-face="front" data-index="8"></div>
-        </div>
-        <div class="face right-face" data-label="오른쪽 (R)">
-            <div class="square" data-face="right" data-index="0"></div>
-            <div class="square" data-face="right" data-index="1"></div>
-            <div class="square" data-face="right" data-index="2"></div>
-            <div class="square" data-face="right" data-index="3"></div>
-            <div class="square" data-face="right" data-index="4"></div>
-            <div class="square" data-face="right" data-index="5"></div>
-            <div class="square" data-face="right" data-index="6"></div>
-            <div class="square" data-face="right" data-index="7"></div>
-            <div class="square" data-face="right" data-index="8"></div>
-        </div>
+  <h1>3D 루빅스 큐브</h1>
+  
+  <div class="cube-container">
+    <div class="cube-3d">
+      <div class="face top-face" id="top-face"></div>
+      <div class="face front-face" id="front-face"></div>
+      <div class="face right-face" id="right-face"></div>
     </div>
+  </div>
 
-    <div class="controls">
-        <p><strong>키보드 조작법</strong></p>
-        <div class="key-guide">
-            <div><strong>면 회전:</strong> R, L, U, D, F, B</div>
-            <div><strong>반시계:</strong> Shift + 키</div>
-            <div><strong>큐브 회전:</strong> X, Y, Z</div>
-            <div><strong>초기화:</strong> Space</div>
-        </div>
-        <button onclick="resetCube()">초기화</button>
+  <div class="controls">
+    <h2>키보드 조작법</h2>
+    <div class="key-guide">
+      <div><strong>면 회전:</strong> R, L, U, D, F, B</div>
+      <div><strong>반시계:</strong> Shift + 키</div>
+      <div><strong>큐브 회전:</strong> X, Y, Z</div>
+      <div><strong>초기화:</strong> Space</div>
     </div>
-    <script src="../js/Cube.js"></script>
+    <button onclick="reset()">초기화</button>
+  </div>
+  
+  <script src="../js/cube.js"></script>
 </body>
 </html>

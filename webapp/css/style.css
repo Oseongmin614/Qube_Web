@@ -1,112 +1,54 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    background: #f0f0f0;
-    font-family: Arial, sans-serif;
-}
+/* 색상 클래스 */
+.red    { background-color: red; }
+.green  { background-color: green; }
+.yellow { background-color: yellow; }
+.white  { background-color: white; }
+.orange { background-color: orange; }
+.blue   { background-color: blue; }
 
 .cube-container {
-    display: grid;
-    grid-template-areas:
-        "top top"
-        "front right";
-    gap: 20px;
-    margin: 20px;
-    position: relative;
+  perspective: 800px;
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
 }
 
+.cube-3d {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  transform-style: preserve-3d;
+  transform: rotateX(-30deg) rotateY(45deg);
+  margin: 100px auto;
+}
+
+/* 각 면 공통 */
 .face {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-    background: #333;
-    padding: 5px;
-    border-radius: 5px;
-    position: relative;
-    pointer-events: none;
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+
+  transform-origin: center center;
+}
+.face div {
+  border: 3px solid #000;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
 }
 
-.face::after {
-    content: attr(data-label);
-    position: absolute;
-    bottom: -25px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #333;
-    font-weight: bold;
+/* 3면 배치 */
+#front-face {/*빨강*/
+  transform: translateZ(75px);
 }
 
-.top-face { grid-area: top; }
-.front-face { grid-area: front; }
-.right-face { grid-area: right; }
-
-.square {
-    width: 50px;
-    height: 50px;
-    background: white;
-    border: 1px solid #444;
-    transition: transform 0.2s;
-    pointer-events: none;
+#right-face {
+  transform: rotateY(90deg) translateZ(-75px);
 }
 
-/* 색상 클래스 */
-.white { background: #ffffff !important; }
-.red { background: #ff0000 !important; }
-.blue { background: #0000ff !important; }
-.orange { background: #ff8800 !important; }
-.green { background: #00ff00 !important; }
-.yellow { background: #ffff00 !important; }
-
-.controls {
-    margin-top: 50px;
-    text-align: center;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.controls p {
-    margin: 5px 0;
-    color: #333;
-}
-
-.key-guide {
-    margin-top: 15px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    text-align: left;
-    font-size: 14px;
-}
-
-.key-guide div {
-    background: #f8f9fa;
-    padding: 8px;
-    border-radius: 5px;
-    border-left: 3px solid #007bff;
-}
-
-button {
-    margin-top: 15px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background: #007bff;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s;
-}
-
-button:hover {
-    background: #0056b3;
+#top-face {
+  transform: rotateX(90deg) translateZ(75px);
 }
