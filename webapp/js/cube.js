@@ -1,129 +1,56 @@
-// 면 인덱스 정의
 const FACE = {
   TOP: 0,
   FRONT_LEFT: 1,
   FRONT_RIGHT: 2,
   BOTTOM: 3,
   BACK_LEFT: 4,
-  BACK_RIGHT: 5
+  BACK_RIGHT: 5,
 };
 
-// 각 면의 기본 색상 (사용자 요청대로)
 const FACE_COLORS = {
-  [FACE.TOP]: 'yellow',
-  [FACE.FRONT_LEFT]: 'red', 
-  [FACE.FRONT_RIGHT]: 'green',
-  [FACE.BOTTOM]: 'white',
-  [FACE.BACK_LEFT]: 'orange',
-  [FACE.BACK_RIGHT]: 'blue'
+  [FACE.TOP]: "yellow",
+  [FACE.FRONT_LEFT]: "red",
+  [FACE.FRONT_RIGHT]: "green",
+  [FACE.BOTTOM]: "white",
+  [FACE.BACK_LEFT]: "orange",
+  [FACE.BACK_RIGHT]: "blue",
 };
 
-// 3x3x6 큐브 배열 생성 및 초기화
+let cube = createSolvedCube();
+let gameStartTime = null;
+let gameTimer = null;
+let isGameActive = false;
+
 function createSolvedCube() {
   const cube = [];
-  
-  // [3][3][6] 배열 생성
   for (let i = 0; i < 3; i++) {
     cube[i] = [];
     for (let j = 0; j < 3; j++) {
-      cube[i][j] = [null, null, null, null, null, null];
+      cube[i][j] = Object.values(FACE_COLORS);
     }
   }
-  
-  // 각 위치별로 해당하는 면의 색상 설정
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      cube[i][j][FACE.TOP] = FACE_COLORS[FACE.TOP];
-      cube[i][j][FACE.FRONT_LEFT] = FACE_COLORS[FACE.FRONT_LEFT];
-      cube[i][j][FACE.FRONT_RIGHT] = FACE_COLORS[FACE.FRONT_RIGHT];
-      cube[i][j][FACE.BOTTOM] = FACE_COLORS[FACE.BOTTOM];
-      cube[i][j][FACE.BACK_LEFT] = FACE_COLORS[FACE.BACK_LEFT];
-      cube[i][j][FACE.BACK_RIGHT] = FACE_COLORS[FACE.BACK_RIGHT];
-    }
-  }
-  
   return cube;
 }
 
-let cube = createSolvedCube();
-
-// 특정 면의 3x3 색상 배열 추출
 function getFaceColors(faceType) {
   const colors = [];
-  
-  if (faceType === 'top') {
-    // TOP 면 추출
-    for (let i = 0; i < 3; i++) {
-      const row = [];
-      for (let j = 0; j < 3; j++) {
-        row.push(cube[i][j][FACE.TOP]);
-      }
-      colors.push(row);
+  const faceMap = {
+    top: FACE.TOP,
+    front: FACE.FRONT_LEFT,
+    right: FACE.FRONT_RIGHT,
+  };
+  const faceIndex = faceMap[faceType];
+
+  for (let i = 0; i < 3; i++) {
+    const row = [];
+    for (let j = 0; j < 3; j++) {
+      row.push(cube[i][j][faceIndex]);
     }
-  } else if (faceType === 'front') {
-    // FRONT_LEFT 면 추출
-    for (let i = 0; i < 3; i++) {
-      const row = [];
-      for (let j = 0; j < 3; j++) {
-        row.push(cube[i][j][FACE.FRONT_LEFT]);
-      }
-      colors.push(row);
-    }
-  } else if (faceType === 'right') {
-    // FRONT_RIGHT 면 추출
-    for (let i = 0; i < 3; i++) {
-      const row = [];
-      for (let j = 0; j < 3; j++) {
-        row.push(cube[i][j][FACE.FRONT_RIGHT]);
-      }
-      colors.push(row);
-    }
+    colors.push(row);
   }
-  
   return colors;
 }
 
-// 화면 렌더링 - 디버깅 정보 추가
-function renderFace(faceElement, colors, faceName) {
-  console.log(`Rendering ${faceName}:`, colors);
-  faceElement.innerHTML = '';
-  colors.forEach(row => {
-    row.forEach(color => {
-      const square = document.createElement('div');
-      square.className = `square ${color}`;
-      console.log(`Creating square with class: square ${color}`);
-      faceElement.appendChild(square);
-    });
-  });
-}
-
-function renderCube() {
-  console.log('=== Rendering Cube ===');
-  console.log('Current cube state:', cube);
-  
-  const topFace = document.getElementById('top-face');
-  const frontFace = document.getElementById('front-face');
-  const rightFace = document.getElementById('right-face');
-  
-  if (!topFace || !frontFace || !rightFace) {
-    console.error('Face elements not found!');
-    return;
-  }
-  
-  const topColors = getFaceColors('top');
-  const frontColors = getFaceColors('front');
-  const rightColors = getFaceColors('right');
-  
-  console.log('Top colors should be:', FACE_COLORS[FACE.TOP]);
-  console.log('Front colors should be:', FACE_COLORS[FACE.FRONT_LEFT]);
-  console.log('Right colors should be:', FACE_COLORS[FACE.FRONT_RIGHT]);
-  
-  renderFace(topFace, topColors, 'TOP');
-  renderFace(frontFace, frontColors, 'FRONT_LEFT');
-  renderFace(rightFace, rightColors, 'FRONT_RIGHT');
-}
-
-// 면 회전을 위한 헬퍼 함수
 function rotateFaceColors(faceIndex, clockwise = true) {
   const temp = [];
   for (let i = 0; i < 3; i++) {
@@ -132,280 +59,403 @@ function rotateFaceColors(faceIndex, clockwise = true) {
       temp[i][j] = cube[i][j][faceIndex];
     }
   }
-  
+
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
-      if (clockwise) {
-        cube[i][j][faceIndex] = temp[2-j][i];
-      } else {
-        cube[i][j][faceIndex] = temp[j][2-i];
-      }
+      cube[i][j][faceIndex] = clockwise ? temp[2 - j][i] : temp[j][2 - i];
     }
   }
 }
 
-// 인접면 색상 회전을 위한 헬퍼 함수
 function rotateAdjacentColors(positions, clockwise = true) {
-  const temp = [];
-  
-  positions.forEach(pos => {
-    temp.push(cube[pos.i][pos.j][pos.face]);
-  });
-  
-  if (clockwise) {
-    for (let k = 0; k < positions.length; k++) {
-      const nextIndex = (k + 1) % positions.length;
-      const pos = positions[k];
-      cube[pos.i][pos.j][pos.face] = temp[nextIndex];
-    }
-  } else {
-    for (let k = 0; k < positions.length; k++) {
-      const prevIndex = (k - 1 + positions.length) % positions.length;
-      const pos = positions[k];
-      cube[pos.i][pos.j][pos.face] = temp[prevIndex];
-    }
-  }
-}
+  const temp = positions.map((pos) => cube[pos.i][pos.j][pos.face]);
 
-// 회전 함수들
+  positions.forEach((pos, k) => {
+    const newIndex = clockwise ? (k + 1) % 4 : (k - 1 + 4) % 4;
+    cube[pos.i][pos.j][pos.face] = temp[newIndex];
+  });
+}
 function rotateR(clockwise = true) {
-  console.log(`Rotating R ${clockwise ? 'clockwise' : 'counter-clockwise'}`);
   rotateFaceColors(FACE.FRONT_RIGHT, clockwise);
-  
+
   for (let i = 0; i < 3; i++) {
-    const positions = [
-      {i: i, j: 2, face: FACE.TOP},
-      {i: i, j: 2, face: FACE.BACK_LEFT},
-      {i: i, j: 2, face: FACE.BOTTOM},
-      {i: i, j: 2, face: FACE.FRONT_LEFT}
-    ];
-    rotateAdjacentColors(positions, clockwise);
+    const temp = cube[i][2][FACE.TOP];
+
+    if (clockwise) {
+      cube[i][2][FACE.TOP] = cube[i][2][FACE.FRONT_LEFT];
+      cube[i][2][FACE.FRONT_LEFT] = cube[i][2][FACE.BOTTOM];
+      cube[i][2][FACE.BOTTOM] = cube[i][2][FACE.BACK_LEFT];
+      cube[i][2][FACE.BACK_LEFT] = temp;
+    } else {
+      cube[i][2][FACE.TOP] = cube[i][2][FACE.BACK_LEFT];
+      cube[i][2][FACE.BACK_LEFT] = cube[i][2][FACE.BOTTOM];
+      cube[i][2][FACE.BOTTOM] = cube[i][2][FACE.FRONT_LEFT];
+      cube[i][2][FACE.FRONT_LEFT] = temp;
+    }
   }
 }
 
 function rotateL(clockwise = true) {
-  console.log(`Rotating L ${clockwise ? 'clockwise' : 'counter-clockwise'}`);
   rotateFaceColors(FACE.BACK_RIGHT, clockwise);
-  
+
   for (let i = 0; i < 3; i++) {
-    const positions = [
-      {i: i, j: 0, face: FACE.TOP},
-      {i: i, j: 0, face: FACE.FRONT_LEFT},
-      {i: i, j: 0, face: FACE.BOTTOM},
-      {i: i, j: 0, face: FACE.BACK_LEFT}
-    ];
-    rotateAdjacentColors(positions, clockwise);
+    const temp = cube[i][0][FACE.TOP];
+
+    if (clockwise) {
+      cube[i][0][FACE.TOP] = cube[i][0][FACE.BACK_LEFT];
+      cube[i][0][FACE.BACK_LEFT] = cube[i][0][FACE.BOTTOM];
+      cube[i][0][FACE.BOTTOM] = cube[i][0][FACE.FRONT_LEFT];
+      cube[i][0][FACE.FRONT_LEFT] = temp;
+    } else {
+      cube[i][0][FACE.TOP] = cube[i][0][FACE.FRONT_LEFT];
+      cube[i][0][FACE.FRONT_LEFT] = cube[i][0][FACE.BOTTOM];
+      cube[i][0][FACE.BOTTOM] = cube[i][0][FACE.BACK_LEFT];
+      cube[i][0][FACE.BACK_LEFT] = temp;
+    }
   }
 }
 
 function rotateU(clockwise = true) {
-  console.log(`Rotating U ${clockwise ? 'clockwise' : 'counter-clockwise'}`);
   rotateFaceColors(FACE.TOP, clockwise);
-  
+
   for (let j = 0; j < 3; j++) {
-    const positions = [
-      {i: 0, j: j, face: FACE.FRONT_LEFT},
-      {i: 0, j: j, face: FACE.FRONT_RIGHT},
-      {i: 0, j: j, face: FACE.BACK_LEFT},
-      {i: 0, j: j, face: FACE.BACK_RIGHT}
-    ];
-    rotateAdjacentColors(positions, clockwise);
+    const temp = cube[0][j][FACE.FRONT_LEFT];
+
+    if (clockwise) {
+      cube[0][j][FACE.FRONT_LEFT] = cube[0][j][FACE.BACK_RIGHT];
+      cube[0][j][FACE.BACK_RIGHT] = cube[0][j][FACE.BACK_LEFT];
+      cube[0][j][FACE.BACK_LEFT] = cube[0][j][FACE.FRONT_RIGHT];
+      cube[0][j][FACE.FRONT_RIGHT] = temp;
+    } else {
+      cube[0][j][FACE.FRONT_LEFT] = cube[0][j][FACE.FRONT_RIGHT];
+      cube[0][j][FACE.FRONT_RIGHT] = cube[0][j][FACE.BACK_LEFT];
+      cube[0][j][FACE.BACK_LEFT] = cube[0][j][FACE.BACK_RIGHT];
+      cube[0][j][FACE.BACK_RIGHT] = temp;
+    }
   }
 }
 
 function rotateD(clockwise = true) {
-  console.log(`Rotating D ${clockwise ? 'clockwise' : 'counter-clockwise'}`);
   rotateFaceColors(FACE.BOTTOM, clockwise);
-  
+
   for (let j = 0; j < 3; j++) {
-    const positions = [
-      {i: 2, j: j, face: FACE.FRONT_LEFT},
-      {i: 2, j: j, face: FACE.BACK_RIGHT},
-      {i: 2, j: j, face: FACE.BACK_LEFT},
-      {i: 2, j: j, face: FACE.FRONT_RIGHT}
-    ];
-    rotateAdjacentColors(positions, clockwise);
+    const temp = cube[2][j][FACE.FRONT_LEFT];
+
+    if (clockwise) {
+      cube[2][j][FACE.FRONT_LEFT] = cube[2][j][FACE.FRONT_RIGHT];
+      cube[2][j][FACE.FRONT_RIGHT] = cube[2][j][FACE.BACK_LEFT];
+      cube[2][j][FACE.BACK_LEFT] = cube[2][j][FACE.BACK_RIGHT];
+      cube[2][j][FACE.BACK_RIGHT] = temp;
+    } else {
+      cube[2][j][FACE.FRONT_LEFT] = cube[2][j][FACE.BACK_RIGHT];
+      cube[2][j][FACE.BACK_RIGHT] = cube[2][j][FACE.BACK_LEFT];
+      cube[2][j][FACE.BACK_LEFT] = cube[2][j][FACE.FRONT_RIGHT];
+      cube[2][j][FACE.FRONT_RIGHT] = temp;
+    }
   }
 }
 
 function rotateF(clockwise = true) {
-  console.log(`Rotating F ${clockwise ? 'clockwise' : 'counter-clockwise'}`);
   rotateFaceColors(FACE.FRONT_LEFT, clockwise);
-  
+
   for (let k = 0; k < 3; k++) {
-    const positions = [
-      {i: 2, j: k, face: FACE.TOP},
-      {i: k, j: 0, face: FACE.FRONT_RIGHT},
-      {i: 0, j: 2-k, face: FACE.BOTTOM},
-      {i: 2-k, j: 2, face: FACE.BACK_RIGHT}
-    ];
-    rotateAdjacentColors(positions, clockwise);
+    const temp = cube[2][k][FACE.TOP];
+
+    if (clockwise) {
+      cube[2][k][FACE.TOP] = cube[2 - k][2][FACE.BACK_RIGHT];
+      cube[2 - k][2][FACE.BACK_RIGHT] = cube[0][2 - k][FACE.BOTTOM];
+      cube[0][2 - k][FACE.BOTTOM] = cube[k][0][FACE.FRONT_RIGHT];
+      cube[k][0][FACE.FRONT_RIGHT] = temp;
+    } else {
+      cube[2][k][FACE.TOP] = cube[k][0][FACE.FRONT_RIGHT];
+      cube[k][0][FACE.FRONT_RIGHT] = cube[0][2 - k][FACE.BOTTOM];
+      cube[0][2 - k][FACE.BOTTOM] = cube[2 - k][2][FACE.BACK_RIGHT];
+      cube[2 - k][2][FACE.BACK_RIGHT] = temp;
+    }
   }
 }
 
 function rotateB(clockwise = true) {
-  console.log(`Rotating B ${clockwise ? 'clockwise' : 'counter-clockwise'}`);
   rotateFaceColors(FACE.BACK_LEFT, clockwise);
-  
+
   for (let k = 0; k < 3; k++) {
-    const positions = [
-      {i: 0, j: k, face: FACE.TOP},
-      {i: k, j: 2, face: FACE.BACK_RIGHT},
-      {i: 2, j: 2-k, face: FACE.BOTTOM},
-      {i: 2-k, j: 0, face: FACE.FRONT_RIGHT}
-    ];
-    rotateAdjacentColors(positions, clockwise);
+    const temp = cube[0][k][FACE.TOP];
+
+    if (clockwise) {
+      cube[0][k][FACE.TOP] = cube[k][2][FACE.FRONT_RIGHT];
+      cube[k][2][FACE.FRONT_RIGHT] = cube[2][2 - k][FACE.BOTTOM];
+      cube[2][2 - k][FACE.BOTTOM] = cube[2 - k][0][FACE.BACK_RIGHT];
+      cube[2 - k][0][FACE.BACK_RIGHT] = temp;
+    } else {
+      cube[0][k][FACE.TOP] = cube[2 - k][0][FACE.BACK_RIGHT];
+      cube[2 - k][0][FACE.BACK_RIGHT] = cube[2][2 - k][FACE.BOTTOM];
+      cube[2][2 - k][FACE.BOTTOM] = cube[k][2][FACE.FRONT_RIGHT];
+      cube[k][2][FACE.FRONT_RIGHT] = temp;
+    }
   }
 }
 
 function rotateCubeX(clockwise = true) {
-  console.log(`Rotating X ${clockwise ? 'clockwise' : 'counter-clockwise'}`);
-
-  // 각 열을 한 번에 임시 저장 후 순환
   for (let j = 0; j < 3; j++) {
-    const temp = [cube[0][j][FACE.TOP], cube[1][j][FACE.TOP], cube[2][j][FACE.TOP]];
-    if (clockwise) {
-      // TOP → BACK_LEFT, BACK_LEFT → BOTTOM, BOTTOM → FRONT_LEFT, FRONT_LEFT → TOP
-      for (let i = 0; i < 3; i++) {
-        cube[i][j][FACE.TOP]         = cube[i][j][FACE.BACK_LEFT];
-        cube[i][j][FACE.BACK_LEFT]   = cube[i][j][FACE.BOTTOM];
-        cube[i][j][FACE.BOTTOM]      = cube[i][j][FACE.FRONT_LEFT];
-        cube[i][j][FACE.FRONT_LEFT]  = temp[i];
-      }
-    } else {
-      // TOP → FRONT_LEFT, FRONT_LEFT → BOTTOM, BOTTOM → BACK_LEFT, BACK_LEFT → TOP
-      for (let i = 0; i < 3; i++) {
-        cube[i][j][FACE.TOP]         = cube[i][j][FACE.FRONT_LEFT];
-        cube[i][j][FACE.FRONT_LEFT]  = cube[i][j][FACE.BOTTOM];
-        cube[i][j][FACE.BOTTOM]      = cube[i][j][FACE.BACK_LEFT];
-        cube[i][j][FACE.BACK_LEFT]   = temp[i];
+    const temp = [
+      cube[0][j][FACE.TOP],
+      cube[1][j][FACE.TOP],
+      cube[2][j][FACE.TOP],
+    ];
+
+    for (let i = 0; i < 3; i++) {
+      if (clockwise) {
+        cube[i][j][FACE.TOP] = cube[i][j][FACE.BACK_LEFT];
+        cube[i][j][FACE.BACK_LEFT] = cube[i][j][FACE.BOTTOM];
+        cube[i][j][FACE.BOTTOM] = cube[i][j][FACE.FRONT_LEFT];
+        cube[i][j][FACE.FRONT_LEFT] = temp[i];
+      } else {
+        cube[i][j][FACE.TOP] = cube[i][j][FACE.FRONT_LEFT];
+        cube[i][j][FACE.FRONT_LEFT] = cube[i][j][FACE.BOTTOM];
+        cube[i][j][FACE.BOTTOM] = cube[i][j][FACE.BACK_LEFT];
+        cube[i][j][FACE.BACK_LEFT] = temp[i];
       }
     }
   }
-  // 옆면 자체 회전
   rotateFaceColors(FACE.FRONT_RIGHT, !clockwise);
   rotateFaceColors(FACE.BACK_RIGHT, clockwise);
 }
 
-// Y축 회전: FRONT_LEFT <-> FRONT_RIGHT <-> BACK_LEFT <-> BACK_RIGHT (시계방향 순환)
 function rotateCubeY(clockwise = true) {
-  console.log(`Rotating Y ${clockwise ? 'clockwise' : 'counter-clockwise'}`);
-
   for (let i = 0; i < 3; i++) {
-    const temp = [cube[i][0][FACE.FRONT_LEFT], cube[i][1][FACE.FRONT_LEFT], cube[i][2][FACE.FRONT_LEFT]];
-    if (clockwise) {
-      // FRONT_LEFT → BACK_RIGHT → BACK_LEFT → FRONT_RIGHT → FRONT_LEFT
-      for (let j = 0; j < 3; j++) {
-        cube[i][j][FACE.FRONT_LEFT]  = cube[i][j][FACE.BACK_RIGHT];
-        cube[i][j][FACE.BACK_RIGHT]  = cube[i][j][FACE.BACK_LEFT];
-        cube[i][j][FACE.BACK_LEFT]   = cube[i][j][FACE.FRONT_RIGHT];
+    const temp = [
+      cube[i][0][FACE.FRONT_LEFT],
+      cube[i][1][FACE.FRONT_LEFT],
+      cube[i][2][FACE.FRONT_LEFT],
+    ];
+
+    for (let j = 0; j < 3; j++) {
+      if (clockwise) {
+        cube[i][j][FACE.FRONT_LEFT] = cube[i][j][FACE.BACK_RIGHT];
+        cube[i][j][FACE.BACK_RIGHT] = cube[i][j][FACE.BACK_LEFT];
+        cube[i][j][FACE.BACK_LEFT] = cube[i][j][FACE.FRONT_RIGHT];
         cube[i][j][FACE.FRONT_RIGHT] = temp[j];
-      }
-    } else {
-      // FRONT_LEFT → FRONT_RIGHT → BACK_LEFT → BACK_RIGHT → FRONT_LEFT
-      for (let j = 0; j < 3; j++) {
-        cube[i][j][FACE.FRONT_LEFT]  = cube[i][j][FACE.FRONT_RIGHT];
+      } else {
+        cube[i][j][FACE.FRONT_LEFT] = cube[i][j][FACE.FRONT_RIGHT];
         cube[i][j][FACE.FRONT_RIGHT] = cube[i][j][FACE.BACK_LEFT];
-        cube[i][j][FACE.BACK_LEFT]   = cube[i][j][FACE.BACK_RIGHT];
-        cube[i][j][FACE.BACK_RIGHT]  = temp[j];
+        cube[i][j][FACE.BACK_LEFT] = cube[i][j][FACE.BACK_RIGHT];
+        cube[i][j][FACE.BACK_RIGHT] = temp[j];
       }
     }
   }
-  // 상하면 자체 회전
   rotateFaceColors(FACE.TOP, clockwise);
   rotateFaceColors(FACE.BOTTOM, !clockwise);
 }
 
-// Z축 회전: 각 면의 3x3 배열을 시계/반시계로 회전, 옆면은 행/열을 순환
 function rotateCubeZ(clockwise = true) {
-  console.log(`Rotating Z ${clockwise ? 'clockwise' : 'counter-clockwise'}`);
-
-  // 각 행을 임시 저장 후 순환
   for (let i = 0; i < 3; i++) {
-    const temp = [cube[0][i][FACE.TOP], cube[1][i][FACE.TOP], cube[2][i][FACE.TOP]];
-    if (clockwise) {
-      // TOP의 행 → FRONT_LEFT의 열 → BOTTOM의 역행 → FRONT_RIGHT의 역열 → TOP
-      for (let j = 0; j < 3; j++) {
-        cube[j][i][FACE.TOP] 		= cube[i][j][FACE.FRONT_RIGHT];
+    const temp = [
+      cube[0][i][FACE.TOP],
+      cube[1][i][FACE.TOP],
+      cube[2][i][FACE.TOP],
+    ];
+
+    for (let j = 0; j < 3; j++) {
+      if (clockwise) {
+        cube[j][i][FACE.TOP] = cube[i][j][FACE.FRONT_RIGHT];
         cube[i][j][FACE.FRONT_RIGHT] = cube[j][i][FACE.BOTTOM];
-        cube[j][i][FACE.BOTTOM]		= cube[j][i][FACE.BACK_RIGHT];
-        cube[j][i][FACE.BACK_RIGHT]= temp[i];
-      }
-    } else {
-      // 역방향 순환
-      for (let j = 0; j < 3; j++) {
-		cube[j][i][FACE.TOP] 		= cube[i][j][FACE.BACK_RIGHT];
-		cube[i][j][FACE.BACK_RIGHT]= cube[j][i][FACE.BOTTOM];
-		cube[j][i][FACE.BOTTOM]		= cube[j][i][FACE.FRONT_LEFT];
-		cube[j][i][FACE.FRONT_LEFT]	=  temp[i];
+        cube[j][i][FACE.BOTTOM] = cube[j][i][FACE.BACK_RIGHT];
+        cube[j][i][FACE.BACK_RIGHT] = temp[i];
+      } else {
+        cube[j][i][FACE.TOP] = cube[i][j][FACE.BACK_RIGHT];
+        cube[i][j][FACE.BACK_RIGHT] = cube[j][i][FACE.BOTTOM];
+        cube[j][i][FACE.BOTTOM] = cube[j][i][FACE.FRONT_RIGHT];
+        cube[j][i][FACE.FRONT_RIGHT] = temp[i];
       }
     }
   }
-  // 뒷면 자체 회전
   rotateFaceColors(FACE.BACK_LEFT, !clockwise);
-  rotateFaceColors(FACE.BACK_RIGHT, clockwise);
+  rotateFaceColors(FACE.FRONT_LEFT, !clockwise);
 }
 
-
-// 초기화
-function reset() {
-  console.log('Resetting cube');
-  cube = createSolvedCube();
-  renderCube();
+function rotateCubeS(clockwise = true) {
+  startGame();
+  return;
 }
+function scrambleCube(moves = 20) {
+  const rotations = [
+    { func: rotateR, name: "R" },
+    { func: rotateL, name: "L" },
+    { func: rotateU, name: "U" },
+    { func: rotateD, name: "D" },
+    { func: rotateF, name: "F" },
+    { func: rotateB, name: "B" },
+  ];
 
-// 키보드 이벤트 처리 - event.code 방식으로 수정 (Z키 문제 해결)
-document.addEventListener('keydown', (e) => {
-  const isShift = e.shiftKey;
-  
-  console.log(`Key pressed: ${e.code}${isShift ? ' + Shift' : ''}`);
-  
-  switch(e.code) {
-    case 'KeyR':
-      rotateR(!isShift);
-      break;
-    case 'KeyL':
-      rotateL(!isShift);
-      break;
-    case 'KeyU':
-      rotateU(!isShift);
-      break;
-    case 'KeyD':
-      rotateD(!isShift);
-      break;
-    case 'KeyF':
-      rotateF(!isShift);
-      break;
-    case 'KeyB':
-      rotateB(!isShift);
-      break;
-    case 'KeyX':
-      rotateCubeX();
-      break;
-    case 'KeyY':
-      rotateCubeY();
-      break;
-    case 'KeyZ':
-      rotateCubeZ();
-      break;
-    case 'Space':
-      e.preventDefault();
-      reset();
-      break;
-    default:
-      return;
+  let scrambleSequence = [];
+  for (let i = 0; i < moves; i++) {
+    const randomMove = rotations[Math.floor(Math.random() * rotations.length)];
+    const clockwise = Math.random() > 0.5;
+    randomMove.func(clockwise);
+    scrambleSequence.push(randomMove.name + (clockwise ? "" : "'"));
   }
-  
+
+  console.log("Scramble sequence:", scrambleSequence.join(" "));
+  return scrambleSequence;
+}
+
+function startTimer() {
+  gameStartTime = Date.now();
+  isGameActive = true;
+  gameTimer = setInterval(updateTimer, 100);
+  document.getElementById("status").textContent = "게임 진행 중...";
+  document.querySelector(".timer-display").classList.remove("completed");
+}
+
+function stopTimer() {
+  if (gameTimer) {
+    clearInterval(gameTimer);
+    gameTimer = null;
+  }
+  isGameActive = false;
+}
+
+function updateTimer() {
+  if (!gameStartTime) return;
+  const elapsed = Date.now() - gameStartTime;
+  const minutes = Math.floor(elapsed / 60000);
+  const seconds = Math.floor((elapsed % 60000) / 1000);
+  document.getElementById("timer").textContent = `${minutes
+    .toString()
+    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+}
+
+function isCubeSolved() {
+  const faces = ["top", "front", "right"];
+  for (const face of faces) {
+    const colors = getFaceColors(face);
+    const firstColor = colors[0][0];
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (colors[i][j] !== firstColor) return false;
+      }
+    }
+  }
+  return true;
+}
+
+function handleGameCompletion() {
+  const elapsed = Date.now() - gameStartTime;
+  const minutes = Math.floor(elapsed / 60000);
+  const seconds = Math.floor((elapsed % 60000) / 1000);
+
+  stopTimer();
+  document.querySelector(".timer-display").classList.add("completed");
+  document.getElementById("status").textContent = `축하합니다! ${
+    minutes > 0 ? minutes + "분 " : ""
+  }${seconds}초 걸렸습니다!`;
+
+  setTimeout(() => {
+    alert(
+      `큐브 완성! ${minutes > 0 ? minutes + "분 " : ""}${seconds}초 걸렸습니다!`
+    );
+  }, 500);
+}
+
+function startGame() {
+  console.log("Starting new game...");
+  stopTimer();
+  reset();
+  document.getElementById("timer").textContent = "00:00";
+  document.getElementById("status").textContent = "큐브를 섞는 중...";
+
+  setTimeout(() => {
+    scrambleCube(20);
+    startTimer();
+    renderCube();
+  }, 500);
+}
+
+function reset() {
+  console.log("Resetting cube");
+  stopTimer();
+  cube = createSolvedCube();
+  document.getElementById("timer").textContent = "00:00";
+  document.getElementById("status").textContent = "게임을 시작하세요!";
+  document.querySelector(".timer-display").classList.remove("completed");
   renderCube();
+}
+
+function renderFace(faceElement, colors) {
+  faceElement.innerHTML = "";
+  colors.forEach((row) => {
+    row.forEach((color) => {
+      const square = document.createElement("div");
+      square.className = `square ${color}`;
+      faceElement.appendChild(square);
+    });
+  });
+}
+
+function renderCube() {
+  const elements = {
+    "top-face": "top",
+    "front-face": "front",
+    "right-face": "right",
+  };
+
+  Object.entries(elements).forEach(([elementId, faceType]) => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      renderFace(element, getFaceColors(faceType));
+    }
+  });
+
+  if (isGameActive && isCubeSolved()) {
+    handleGameCompletion();
+  }
+}
+
+// 키보드 이벤트 리스너 (S키 추가)
+document.addEventListener("keydown", (e) => {
+  const isShift = e.shiftKey;
+
+  if (e.code === "KeyS") {
+    startGame();
+    return;
+  }
+
+  const rotationMap = {
+    KeyR: () => rotateR(!isShift),
+    KeyL: () => rotateL(!isShift),
+    KeyU: () => rotateU(!isShift),
+    KeyD: () => rotateD(!isShift),
+    KeyF: () => rotateF(!isShift),
+    KeyB: () => rotateB(!isShift),
+    KeyX: () => rotateCubeX(!isShift),
+    KeyY: () => rotateCubeY(!isShift),
+    Keyc: () => rotateCubeY(!isShift),
+    KeyZ: () => rotateCubeZ(!isShift),
+    KeyS: () => rotateCubeS(!isShift),
+  };
+
+  if (rotationMap[e.code]) {
+    rotationMap[e.code]();
+    renderCube();
+  } else if (e.code === "Space") {
+    e.preventDefault();
+    reset();
+  }
 });
 
-// 초기 렌더링
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM loaded, initializing cube');
-  console.log('Expected colors:');
-  console.log('TOP:', FACE_COLORS[FACE.TOP]);
-  console.log('FRONT_LEFT:', FACE_COLORS[FACE.FRONT_LEFT]);
-  console.log('FRONT_RIGHT:', FACE_COLORS[FACE.FRONT_RIGHT]);
-  
+// DOM 로드 완료 후 초기화
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM loaded, initializing cube");
+
+  const startButton = document.getElementById("start-game-btn");
+  if (startButton) {
+    startButton.addEventListener("click", startGame);
+  }
+
+  const resetButton = document.getElementById("reset-btn");
+  if (resetButton) {
+    resetButton.addEventListener("click", reset);
+  }
+
   renderCube();
 });

@@ -1,10 +1,22 @@
-/* 색상 클래스 */
-.red    { background-color: red; }
-.green  { background-color: green; }
-.yellow { background-color: yellow; }
-.white  { background-color: white; }
-.orange { background-color: orange; }
-.blue   { background-color: blue; }
+/* �됱긽 �대옒�� */
+.red {
+  background-color: red;
+}
+.green {
+  background-color: green;
+}
+.yellow {
+  background-color: yellow;
+}
+.white {
+  background-color: white;
+}
+.orange {
+  background-color: orange;
+}
+.blue {
+  background-color: blue;
+}
 
 .cube-container {
   perspective: 800px;
@@ -22,7 +34,7 @@
   margin: 100px auto;
 }
 
-/* 각 면 공통 */
+/* 媛� 硫� 怨듯넻 */
 .face {
   position: absolute;
   width: 150px;
@@ -40,8 +52,7 @@
   height: 100%;
 }
 
-/* 3면 배치 */
-#front-face {/*빨강*/
+#front-face {
   transform: translateZ(75px);
 }
 
@@ -51,4 +62,279 @@
 
 #top-face {
   transform: rotateX(90deg) translateZ(75px);
+}
+
+.game-controls {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.start-button,
+.reset-button {
+  background: linear-gradient(45deg, #4caf50, #45a049);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 8px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.reset-button {
+  background: linear-gradient(45deg, #f44336, #da190b);
+}
+
+.start-button:hover {
+  background: linear-gradient(45deg, #45a049, #4caf50);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.reset-button:hover {
+  background: linear-gradient(45deg, #da190b, #f44336);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.start-button:active,
+.reset-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.controls {
+  text-align: center;
+  margin: 20px 0;
+  background: #f5f5f5;
+  padding: 15px;
+  border-radius: 8px;
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.timer-display {
+  text-align: center;
+  margin: 20px 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: 20px auto;
+}
+
+#timer {
+  font-size: 3em;
+  font-weight: bold;
+  margin: 0;
+  font-family: "Courier New", monospace;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#status {
+  font-size: 1.2em;
+  margin: 10px 0 0 0;
+  opacity: 0.9;
+}
+
+.timer-display.completed {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  animation: pulse 2s ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.ranking-button {
+  background: linear-gradient(45deg, #9c27b0, #673ab7);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 8px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.clear-button {
+  background: linear-gradient(45deg, #ff5722, #e64a19);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 8px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.ranking-button:hover {
+  background: linear-gradient(45deg, #673ab7, #9c27b0);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.clear-button:hover {
+  background: linear-gradient(45deg, #e64a19, #ff5722);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* 모달 스타일 */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  text-align: center;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #000;
+}
+
+/* 랭킹 리스트 스타일 */
+#ranking-list {
+  margin-top: 20px;
+}
+
+.ranking-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  margin: 10px 0;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.ranking-item.top-3 {
+  background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+  color: #333;
+  font-weight: bold;
+}
+
+.ranking-item.top-2 {
+  background: linear-gradient(135deg, #c0c0c0 0%, #a9a9a9 100%);
+}
+
+.ranking-item.top-1 {
+  background: linear-gradient(135deg, #cd7f32 0%, #b8860b 100%);
+}
+
+.ranking-rank {
+  font-size: 1.2em;
+  font-weight: bold;
+  min-width: 40px;
+}
+
+.ranking-name {
+  flex-grow: 1;
+  text-align: left;
+  margin-left: 15px;
+}
+
+.ranking-time {
+  font-family: "Courier New", monospace;
+  font-weight: bold;
+}
+
+/* 이름 입력 모달 스타일 */
+#player-name {
+  width: 80%;
+  padding: 12px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.modal-buttons {
+  margin-top: 20px;
+}
+
+.modal-buttons button {
+  padding: 12px 24px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#save-score-btn {
+  background: linear-gradient(45deg, #4caf50, #45a049);
+  color: white;
+}
+
+#skip-save-btn {
+  background: linear-gradient(45deg, #757575, #616161);
+  color: white;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
