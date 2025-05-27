@@ -1,65 +1,62 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D 루빅스 큐브</title>
-    <link rel="stylesheet" href="../css/style.css" />
-  </head>
-  <body>
-    <h1>3D 루빅스 큐브</h1>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
     <div class="timer-display">
-      <h2 id="timer">00:00</h2>
-      <p id="status">게임을 시작하세요!</p>
+        <div id="timer">00:00</div>
+        <div id="status">게임을 시작하세요!</div>
     </div>
+
     <div class="cube-container">
-      <div class="cube-3d">
-        <div id="top-face" class="face"></div>
-        <div id="front-face" class="face"></div>
-        <div id="right-face" class="face"></div>
-      </div>
+        <div class="cube-3d">
+            <div class="face" id="top-face"></div>
+            <div class="face" id="front-face"></div>
+            <div class="face" id="right-face"></div>
+        </div>
     </div>
+
     <div class="game-controls">
-      <button id="start-game-btn" class="start-button">게임 시작</button>
-      <button id="reset-btn" class="reset-button">초기화</button>
-      <button id="show-ranking-btn" class="ranking-button">랭킹 보기</button>
-      <button id="clear-ranking-btn" class="clear-button">기록 삭제</button>
+        <button id="start-game-btn" class="start-button">게임 시작</button>
+        <button id="reset-btn" class="reset-button">초기화</button>
+        <button id="show-ranking-btn" class="ranking-button">랭킹 보기</button>
+        <button id="clear-records-btn" class="clear-button">기록 삭제</button>
     </div>
 
     <!-- 랭킹 모달 -->
     <div id="ranking-modal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>🏆 최고 기록</h2>
-        <div id="ranking-list"></div>
-      </div>
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>🏆 최고 기록</h2>
+            <div id="ranking-list"></div>
+        </div>
     </div>
 
-    <!-- 이름 입력 모달 -->
-    <div id="name-modal" class="modal">
-      <div class="modal-content">
-        <p id="completion-message"></p>
-        <input
-          type="text"
-          id="player-name"
-          placeholder="이름을 입력하세요"
-          maxlength="10"
-        />
-        <div class="modal-buttons">
-          <button id="save-score-btn">기록 저장</button>
-          <button id="skip-save-btn">건너뛰기</button>
+    <!-- 기록 저장 모달 -->
+    <div id="save-modal" class="modal">
+        <div class="modal-content">
+            <h2>🎉 축하합니다!</h2>
+            <p id="completion-message"></p>
+            <input type="text" id="player-name" placeholder="이름을 입력하세요" maxlength="10">
+            <div class="modal-buttons">
+                <button id="save-score-btn">기록 저장</button>
+                <button id="skip-save-btn">건너뛰기</button>
+            </div>
         </div>
-      </div>
     </div>
 
     <div class="controls">
-      <h3>키보드 조작법</h3>
-      <p><strong>면 회전:</strong> R, L, U, D, F, B</p>
-      <p><strong>반시계:</strong> Shift + 키</p>
-      <p><strong>큐브 회전:</strong> X, Y, Z</p>
-      <p><strong>초기화:</strong> Space</p>
+        <h3>키보드 조작법</h3>
+        <p><strong>면 회전:</strong><br>R, L, U, D, F, B</p>
+        <p><strong>반시계:</strong><br>Shift + 키</p>
+        <p><strong>큐브 회전:</strong><br>X, Y, Z</p>
+        <p><strong>초기화:</strong><br>Space</p>
     </div>
 
     <script src="../js/cube.js"></script>
-  </body>
+</body>
 </html>
