@@ -30,7 +30,7 @@
   height: 150px;
   transform-style: preserve-3d;
   transform: rotateX(-30deg) rotateY(45deg);
-  margin: 100px auto;
+  margin: 50px auto 20px auto;
 }
 
 /* 媛� 硫� 怨듯넻 */
@@ -65,7 +65,7 @@
 
 .game-controls {
   text-align: center;
-  margin: 20px 0;
+  margin: 10px 0;
 }
 
 .start-button,
@@ -110,12 +110,19 @@
 
 .controls {
   text-align: center;
-  margin: 20px 0;
-  background: #f5f5f5;
-  padding: 15px;
-  border-radius: 8px;
-  max-width: 400px;
-  margin: 20px auto;
+  margin: 40px auto;
+  background: linear-gradient(45deg, #4caf50, #45a049);
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 15px;
+  max-width: 1200px; /* 너비 조정 */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 6px 6px rgba(0, 0, 0, 0.25);
+}
+
+.controls h3 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    color: #ffffff;
 }
 
 .timer-display {
@@ -223,7 +230,7 @@
 .modal-content {
   background-color: #fefefe;
   margin: 10% auto;
-  padding: 30px;
+  padding: 40px 20px 60px 20px;
   border-radius: 15px;
   width: 90%;
   max-width: 500px;
@@ -327,6 +334,43 @@
 #skip-save-btn {
   background: linear-gradient(45deg, #757575, #616161);
   color: white;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.controls-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.controls-table td {
+    border: none;
+    text-align: center;
+}
+
+.control-label {
+    font-weight: bold;
+    color: rgba(255, 255, 255);
+    width: 30%;
+}
+
+.control-keys {
+    white-space: nowrap;
+}
+
+.control-keys code {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-family: "Courier New", monospace;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+    margin: 0 5px;
+    display: inline-block;
 }
 
 @keyframes fadeIn {

@@ -75,13 +75,13 @@ function renderRanking() {
     records.forEach((record, idx) => {
         const item = document.createElement('div');
         item.className = `ranking-item ${idx < 3 ? 'top-' + (idx + 1) : ''}`;
-        
+
         item.innerHTML = `
             <span class="ranking-rank">${idx + 1}위</span>
             <span class="ranking-name">${record.name}</span>
             <span class="ranking-time">${formatTime(record.time)}</span>
         `;
-        
+
         container.appendChild(item);
     });
 }
@@ -123,7 +123,7 @@ function rotateFaceColors(faceIndex, clockwise = true) {
             temp[i][j] = cube[i][j][faceIndex];
         }
     }
-    
+
     // 시계방향 또는 반시계방향으로 회전
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
@@ -377,13 +377,14 @@ function handleGameCompletion() {
 
     const minutes = Math.floor(totalSeconds / 60);
     const remainingSeconds = totalSeconds % 60;
-    
+
     stopTimer();
     document.querySelector(".timer-display").classList.add("completed");
     document.getElementById("status").textContent = `축하합니다! ${formatTime(totalSeconds)} 걸렸습니다!`;
 
     document.getElementById("completion-message").textContent = `${formatTime(totalSeconds)}에 큐브를 완성했습니다!`;
     document.getElementById("save-modal").style.display = "block";
+    document.body.classList.add("modal-open");
     document.getElementById("player-name").focus();
 }
 // 기록 저장 버튼 이벤트
@@ -391,6 +392,7 @@ document.getElementById("save-score-btn").addEventListener("click", () => {
     const playerName = document.getElementById("player-name").value.trim() || "익명";
     saveRecord(totalSeconds, playerName); // 💡 전역 변수 사용
     document.getElementById("save-modal").style.display = "none";
+    document.body.classList.remove("modal-open");
     document.getElementById("player-name").value = "";
     alert("기록이 저장되었습니다!");
 });
@@ -401,7 +403,7 @@ function startGame() {
     reset();
     document.getElementById("timer").textContent = "00:00";
     document.getElementById("status").textContent = "큐브를 섞는 중...";
-    
+
     setTimeout(() => {
         scrambleCube();
         startTimer();
@@ -452,7 +454,7 @@ function renderCube() {
 // 키보드 이벤트 리스너
 document.addEventListener("keydown", (e) => {
     const isShift = e.shiftKey;
-    
+
     if (e.code === "KeyS") {
         startGame();
         return;
@@ -482,7 +484,7 @@ document.addEventListener("keydown", (e) => {
 // DOM 로드 완료 후 초기화
 document.addEventListener("DOMContentLoaded", () => {
     console.log("DOM loaded, initializing cube");
-    
+
     // 게임 버튼 이벤트
     const startButton = document.getElementById("start-game-btn");
     if (startButton) {
@@ -499,6 +501,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (showRankingBtn) {
         showRankingBtn.addEventListener("click", () => {
             document.getElementById("ranking-modal").style.display = "block";
+            document.body.classList.add("modal-open");
             renderRanking();
         });
     }
@@ -512,6 +515,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.close').forEach(closeBtn => {
         closeBtn.addEventListener('click', (e) => {
             e.target.closest('.modal').style.display = 'none';
+            document.body.classList.remove("modal-open");
         });
     });
 
@@ -520,6 +524,7 @@ document.addEventListener("DOMContentLoaded", () => {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.style.display = 'none';
+                document.body.classList.remove("modal-open");
             }
         });
     });
@@ -528,6 +533,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 기록 저장 건너뛰기 버튼 이벤트
     document.getElementById("skip-save-btn").addEventListener("click", () => {
         document.getElementById("save-modal").style.display = "none";
+        document.body.classList.remove("modal-open");
         document.getElementById("player-name").value = "";
     });
 
@@ -538,6 +544,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-	
+
     renderCube();
 });

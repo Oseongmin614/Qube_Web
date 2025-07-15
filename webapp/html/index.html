@@ -7,56 +7,70 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <div class="timer-display">
-        <div id="timer">00:00</div>
-        <div id="status">게임을 시작하세요!</div>
-    </div>
+<div class="timer-display">
+    <div id="timer">00:00</div>
+    <div id="status">게임을 시작하세요!</div>
+</div>
 
-    <div class="cube-container">
-        <div class="cube-3d">
-            <div class="face" id="top-face"></div>
-            <div class="face" id="front-face"></div>
-            <div class="face" id="right-face"></div>
+<div class="cube-container">
+    <div class="cube-3d">
+        <div class="face" id="top-face"></div>
+        <div class="face" id="front-face"></div>
+        <div class="face" id="right-face"></div>
+    </div>
+</div>
+
+<div class="game-controls">
+    <button id="start-game-btn" class="start-button">게임 시작</button>
+    <button id="reset-btn" class="reset-button">초기화</button>
+    <button id="show-ranking-btn" class="ranking-button">랭킹 보기</button>
+    <button id="clear-records-btn" class="clear-button">기록 삭제</button>
+</div>
+
+<!-- 랭킹 모달 -->
+<div id="ranking-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>🏆 최고 기록</h2>
+        <div id="ranking-list"></div>
+    </div>
+</div>
+
+<!-- 기록 저장 모달 -->
+<div id="save-modal" class="modal">
+    <div class="modal-content">
+        <h2>🎉 축하합니다!</h2>
+        <p id="completion-message"></p>
+        <input type="text" id="player-name" placeholder="이름을 입력하세요" maxlength="10">
+        <div class="modal-buttons">
+            <button id="save-score-btn">기록 저장</button>
+            <button id="skip-save-btn">건너뛰기</button>
         </div>
     </div>
+</div>
 
-    <div class="game-controls">
-        <button id="start-game-btn" class="start-button">게임 시작</button>
-        <button id="reset-btn" class="reset-button">초기화</button>
-        <button id="show-ranking-btn" class="ranking-button">랭킹 보기</button>
-        <button id="clear-records-btn" class="clear-button">기록 삭제</button>
-    </div>
+<div class="controls">
+    <h3>키보드 조작법</h3>
+    <table class="controls-table">
+        <tr>
+            <td class="control-label">면 회전 (시계)</td>
+            <td class="control-keys"><code>R</code>, <code>L</code>, <code>U</code>, <code>D</code>, <code>F</code>, <code>B</code></td>
+            <td class="control-label"> </td>
+            <td class="control-keys"> </td>
+            <td class="control-label">큐브 전체 회전</td>
+            <td class="control-keys"><code>X</code>, <code>Y</code>, <code>Z</code></td>
+        </tr>
+        <tr>
+            <td class="control-label">면 회전 (반시계)</td>
+            <td class="control-keys"><code>Shift</code> + <code>키</code></td>
+            <td class="control-label">게임시작</td>
+            <td class="control-keys"><code>S</code></td>
+            <td class="control-label">초기화</td>
+            <td class="control-keys"><code>Space</code></td>
+        </tr>
+    </table>
+</div>
 
-    <!-- 랭킹 모달 -->
-    <div id="ranking-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>🏆 최고 기록</h2>
-            <div id="ranking-list"></div>
-        </div>
-    </div>
-
-    <!-- 기록 저장 모달 -->
-    <div id="save-modal" class="modal">
-        <div class="modal-content">
-            <h2>🎉 축하합니다!</h2>
-            <p id="completion-message"></p>
-            <input type="text" id="player-name" placeholder="이름을 입력하세요" maxlength="10">
-            <div class="modal-buttons">
-                <button id="save-score-btn">기록 저장</button>
-                <button id="skip-save-btn">건너뛰기</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="controls">
-        <h3>키보드 조작법</h3>
-        <p><strong>면 회전:</strong><br>R, L, U, D, F, B</p>
-        <p><strong>반시계:</strong><br>Shift + 키</p>
-        <p><strong>큐브 회전:</strong><br>X, Y, Z</p>
-        <p><strong>초기화:</strong><br>Space</p>
-    </div>
-
-    <script src="../js/cube.js"></script>
+<script src="../js/cube.js"></script>
 </body>
 </html>
