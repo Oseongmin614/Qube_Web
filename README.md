@@ -1,4 +1,5 @@
 # Web Cube Game
+<img width="753" height="860" alt="image" src="https://github.com/user-attachments/assets/a023dc14-ab4a-4d09-bdcf-4958793fa431" />
 
 ## 설명
 
